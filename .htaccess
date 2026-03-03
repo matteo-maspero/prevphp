@@ -1,0 +1,16 @@
+RewriteEngine On
+DirectorySlash Off
+
+# Remove trailing slashes (except for the root directory)
+RewriteCond %{REQUEST_URI} ^(.*)/$
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Prevent directory traversal attacks
+RewriteCond %{REQUEST_URI} \.\. [NC]
+RewriteRule ^ - [F,L]
+
+# Allow public folder to be reachable directly
+RewriteRule ^public/ - [L]
+
+# Redirect all other requests to the bootstrap file
+RewriteRule ^(.*)$ core/App.php [L,QSA]
